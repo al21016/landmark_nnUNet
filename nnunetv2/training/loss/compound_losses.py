@@ -4,6 +4,14 @@ from nnunetv2.training.loss.robust_ce_loss import RobustCrossEntropyLoss, TopKLo
 from nnunetv2.utilities.helpers import softmax_helper_dim1
 from torch import nn
 
+class KL_Div_loss(nn.Module):
+    def __init__(self):
+        self.KL = nn.KLDivLoss()
+
+    def forward(self, net_output: torch.Tensor, target: torch.Tensor):
+        kl_loss = self.KL(net_output, target)
+        return kl_loss
+
 
 class DC_and_CE_loss(nn.Module):
     def __init__(self, soft_dice_kwargs, ce_kwargs, weight_ce=1, weight_dice=1, ignore_label=None,
